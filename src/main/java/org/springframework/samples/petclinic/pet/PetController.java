@@ -94,20 +94,21 @@ public class PetController {
 	}
 
 	@PostMapping(value = "/pets/new")
-	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, ModelMap model) {		
+	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, ModelMap model) {	
+		String view = "welcome";
 		if (result.hasErrors()) {
 			model.put("pet", pet);
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 		else {
-                    try{
-                    	owner.addPet(pet);
-                    	this.petService.savePet(pet);
-                    }catch(DuplicatedPetNameException ex){
-                        result.rejectValue("name", "duplicate", "already exists");
-                        return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
-                    }
-                    return "redirect:/owners/{ownerId}";
+            try{
+            	owner.addPet(pet);
+            	this.petService.savePet(pet);
+            }catch(DuplicatedPetNameException ex){
+                result.rejectValue("name", "duplicate", "already exists");
+                return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+            }
+            return "redirect:/owners/{ownerId}";
 		}
 	}
 
